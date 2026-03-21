@@ -27,3 +27,4 @@ public class PostTests {
                 .body("url", containsString("/post"));
     }
 }
+

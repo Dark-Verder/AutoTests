@@ -28,3 +28,4 @@ public class GetWithParamsTest {
                 .body("url", containsString("name=Vader"));
     }
 }
+

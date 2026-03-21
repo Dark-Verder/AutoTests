@@ -30,3 +30,4 @@ public class PatchTests {
                 .body("json.age", equalTo(2700));
     }
 }
+

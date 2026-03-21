@@ -28,3 +28,4 @@ public class GetTests {
         response.then().body("url", containsString("street=Primavera"));
     }
 }
+
