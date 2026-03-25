@@ -3,6 +3,7 @@ package lesson10;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MtsPaymentTest extends BaseTest {
 
@@ -50,5 +51,27 @@ public class MtsPaymentTest extends BaseTest {
                 || driver.getPageSource().contains("Банковской картой")
                 || driver.getCurrentUrl().contains("pay"));
 
+    }
+
+    @Test
+    void checkPlaceholders() {
+
+        MtsPage page = new MtsPage(driver);
+
+        page.clickCookieAgreeButton();
+
+        page.selectService("Услуги связи");
+        assertEquals("Номер телефона", page.getPhonePlaceholder());
+        assertEquals("Сумма", page.getSumPlaceholder());
+        assertEquals("E-mail для отправки чека", page.getEmailPlaceholder());
+
+        page.selectService("Домашний интернет");
+        assertTrue(page.getPhonePlaceholder() != null);
+
+        page.selectService("Рассрочка");
+        assertTrue(page.getPhonePlaceholder() != null);
+
+        page.selectService("Задолженность");
+        assertTrue(page.getPhonePlaceholder() != null);
     }
 }

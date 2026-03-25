@@ -1,3 +1,5 @@
+package Checkouts;
+
 import org.junit.jupiter.api.Test;
 
 public class FirstTest {

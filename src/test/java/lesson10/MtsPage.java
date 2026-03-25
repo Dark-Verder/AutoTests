@@ -68,19 +68,45 @@ public class MtsPage {
         wait.until(ExpectedConditions.urlContains(text));
     }
 
+    private By tabService = By.xpath("//*[contains(text(),'Услуги связи')]");
+
+    public void selectService(String serviceName) {
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@class,'select__header')]")));
+        dropdown.click();
+
+        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//p[normalize-space()='" + serviceName + "']")));
+        option.click();
+    }
+
     private By cookiesButton = By.id("cookie-agree");
     private By phoneInput = By.id("connection-phone");
     private By sumInput = By.id("connection-sum");
     private By continueButton = By.xpath("//form[@id='pay-connection']//button");
+    private By emailInput = By.id("connection-email");
 
     public void enterPhone(String phone) {
         WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(phoneInput));
         input.sendKeys(phone);
     }
 
+    public String getPhonePlaceholder() {
+        return driver.findElement(phoneInput).getAttribute("placeholder");
+    }
+
     public void enterSum(String sum) {
         WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(sumInput));
         input.sendKeys(sum);
+    }
+
+    public String getSumPlaceholder() {
+        return driver.findElement(sumInput).getAttribute("placeholder");
+    }
+
+    public String getEmailPlaceholder() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput))
+                .getAttribute("placeholder");
     }
 
     public void clickContinue() {
