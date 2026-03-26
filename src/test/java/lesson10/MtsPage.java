@@ -113,7 +113,62 @@ public class MtsPage {
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(continueButton));
         button.click();
     }
+
+    private By paymentFrame = By.xpath("//iframe[contains(@class,'payment-widget-iframe')]");
+
+    public void switchToPaymentFrame() {
+        WebElement frame = wait.until(ExpectedConditions.visibilityOfElementLocated(paymentFrame));
+        driver.switchTo().frame(frame);
+    }
+
+    private By payButton = By.xpath("//button[.//span[contains(text(), 'Оплатить')]]");
+
+    public String getPayButton() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(payButton)).getText();
+    }
+
+    private By paySum = By.xpath("//div[contains(@class,'pay-description__cost')]/span");
+
+    public String getPaySum() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(paySum)).getText();
+    }
+
+    private By phoneNumber = By.xpath("//div[contains(@class, 'pay-description__text')]/span");
+
+    public String getPhoneNumber() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(phoneNumber)).getText();
+    }
+
+    public void openPaymentForm(String phone, String sum) {
+        clickCookieAgreeButton();
+        enterPhone(phone);
+        enterSum(sum);
+        clickContinue();
+        switchToPaymentFrame();
+    }
+
+    private By cardNumberLable = By.xpath("//input[@id='cc-number']/following-sibling::label");
+    private By expirationDataLabel = By.xpath("//input[@formcontrolname = 'expirationDate']/following-sibling::label");
+    private By cvcLabel = By.xpath("//input[@formcontrolname = 'cvc']//following-sibling::label");
+    private By holderNameLable = By.xpath("//input[@formcontrolname = 'holder']/following-sibling::label");
+
+    public String getCardNumberLableText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cardNumberLable)).getText();
+    }
+
+    public String getExpirationDataLabelText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(expirationDataLabel)).getText();
+    }
+
+    public String getCvcLabelText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cvcLabel)).getText();
+    }
+
+    public String getHolderNameLableText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(holderNameLable)).getText();
+    }
 }
+
 
 
 

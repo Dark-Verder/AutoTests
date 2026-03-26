@@ -46,11 +46,9 @@ public class MtsPaymentTest extends BaseTest {
         mtsPage.enterPhone("297777777");
         mtsPage.enterSum("100");
         mtsPage.clickContinue();
+        mtsPage.switchToPaymentFrame();
 
-        assertTrue(driver.getPageSource().contains("Оплата")
-                || driver.getPageSource().contains("Банковской картой")
-                || driver.getCurrentUrl().contains("pay"));
-
+        assertEquals("Оплатить 100.00 BYN", mtsPage.getPayButton());
     }
 
     @Test
@@ -73,5 +71,20 @@ public class MtsPaymentTest extends BaseTest {
 
         page.selectService("Задолженность");
         assertTrue(page.getPhonePlaceholder() != null);
+    }
+
+    @Test
+    void paymentDetails() {
+
+        MtsPage page = new MtsPage(driver);
+
+        page.openPaymentForm("297777777", "100");
+
+        assertEquals("100.00 BYN", page.getPaySum());
+        assertEquals("Оплата: Услуги связи Номер:375297777777", page.getPhoneNumber());
+        assertEquals("Номер карты", page.getCardNumberLableText());
+        assertEquals("Срок действия", page.getExpirationDataLabelText());
+        assertEquals("CVC", page.getCvcLabelText());
+        assertEquals("Имя и фамилия на карте", page.getHolderNameLableText());
     }
 }
