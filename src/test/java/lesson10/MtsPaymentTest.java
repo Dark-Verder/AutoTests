@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
 
 public class MtsPaymentTest extends BaseTest {
 
@@ -52,25 +53,23 @@ public class MtsPaymentTest extends BaseTest {
     }
 
     @Test
-    void checkPlaceholders() {
+    void checkServiceDropdownOptions() {
 
         MtsPage page = new MtsPage(driver);
 
         page.clickCookieAgreeButton();
 
-        page.selectService("Услуги связи");
-        assertEquals("Номер телефона", page.getPhonePlaceholder());
-        assertEquals("Сумма", page.getSumPlaceholder());
-        assertEquals("E-mail для отправки чека", page.getEmailPlaceholder());
+        page.openServiceDropdown();
+        List<String> actualOptions = page.getServiceOptionsText();
 
-        page.selectService("Домашний интернет");
-        assertTrue(page.getPhonePlaceholder() != null);
+        List<String> expectedOptions = List.of(
+                "Услуги связи",
+                "Домашний интернет",
+                "Рассрочка",
+                "Задолженность"
+        );
 
-        page.selectService("Рассрочка");
-        assertTrue(page.getPhonePlaceholder() != null);
-
-        page.selectService("Задолженность");
-        assertTrue(page.getPhonePlaceholder() != null);
+        assertEquals(expectedOptions, actualOptions);
     }
 
     @Test
@@ -86,5 +85,9 @@ public class MtsPaymentTest extends BaseTest {
         assertEquals("Срок действия", page.getExpirationDataLabelText());
         assertEquals("CVC", page.getCvcLabelText());
         assertEquals("Имя и фамилия на карте", page.getHolderNameLableText());
+        assertTrue(page.isVisaLogoPDisplayed());
+        assertTrue(page.isMasterCardPDisplayed());
+        assertTrue(page.isBelkartLogoPDisplayed());
+        assertTrue(page.isActiverandomLogo());
     }
 }
