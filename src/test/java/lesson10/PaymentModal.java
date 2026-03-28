@@ -18,32 +18,31 @@ public class PaymentModal {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
-    // ПЕРЕКЛЮК НА ФРЭЙМ
     private By paymentFrame = By.xpath("//iframe[contains(@class,'payment-widget-iframe')]");
 
-    public void switchToPaymentFrame () {
+    public void switchToPaymentFrame() {
         WebElement frame = wait.until(ExpectedConditions.visibilityOfElementLocated(paymentFrame));
         driver.switchTo().frame(frame);
     }
-    // КНОПКА ОПЛАТИТЬ В МОДАЛКЕ
+
     private By payButton = By.xpath("//button[.//span[contains(text(), 'Оплатить')]]");
 
-    public String getPayButton () {
+    public String getPayButton() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(payButton)).getText();
     }
-    //СУММА НАВЕРХУ В МОДАЛКЕ
+
     private By paySum = By.xpath("//div[contains(@class,'pay-description__cost')]/span");
 
-    public String getPaySum () {
+    public String getPaySum() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(paySum)).getText();
     }
-    // НОМЕР ТЕЛЕФОНА НАВЕРХУ В МОДАЛКЕ
+
     private By phoneNumber = By.xpath("//div[contains(@class, 'pay-description__text')]/span");
 
-    public String getPhoneNumber () {
+    public String getPhoneNumber() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(phoneNumber)).getText();
     }
-    // ПРОВЕРКА ОКНА В МОДАЛКЕ - ФОРМА + ЛОГОС
+
     private By cardNumberLabel = By.xpath("//input[@id='cc-number']/following-sibling::label");
     private By expirationDateLabel = By.xpath("//input[@formcontrolname = 'expirationDate']/following-sibling::label");
     private By cvcLabel = By.xpath("//input[@formcontrolname = 'cvc']//following-sibling::label");
@@ -53,35 +52,35 @@ public class PaymentModal {
     private By belkartLogoP = By.xpath("//img[contains(@src, 'belkart')]");
     private By activerandomLogo = By.xpath("//div[contains(@class, 'cards-brands_random')]//img[contains(@style,'opacity: 1')]");
 
-    public String getCardNumberLabelText () {
+    public String getCardNumberLabelText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardNumberLabel)).getText();
     }
 
-    public String getExpirationDateLabelText () {
+    public String getExpirationDateLabelText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(expirationDateLabel)).getText();
     }
 
-    public String getCvcLabelText () {
+    public String getCvcLabelText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cvcLabel)).getText();
     }
 
-    public String getHolderNameLabelText () {
+    public String getHolderNameLabelText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(holderNameLabel)).getText();
     }
 
-    public boolean isVisaLogoPDisplayed () {
+    public boolean isVisaLogoPDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(visaLogoP)).isDisplayed();
     }
 
-    public boolean isMasterCardPDisplayed () {
+    public boolean isMasterCardPDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(masterCardP)).isDisplayed();
     }
 
-    public boolean isBelkartLogoPDisplayed () {
+    public boolean isBelkartLogoPDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(belkartLogoP)).isDisplayed();
     }
 
-    public boolean isActiveRandomLogoDisplayed () {
+    public boolean isActiveRandomLogoDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(activerandomLogo)).isDisplayed();
     }
 }

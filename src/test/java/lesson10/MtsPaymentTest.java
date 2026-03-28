@@ -52,6 +52,7 @@ public class MtsPaymentTest extends BaseTest {
         mtsPage.enterPhone("297777777");
         mtsPage.enterSum("100");
         mtsPage.clickContinue();
+
         paymentModal.switchToPaymentFrame();
 
         assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButton());
@@ -60,12 +61,10 @@ public class MtsPaymentTest extends BaseTest {
     @Test
     void checkServiceDropdownOptions() {
 
-        MtsPage page = new MtsPage(driver);
+        mtsPage.clickCookieAgreeButton();
+        mtsPage.openServiceDropdown();
 
-        page.clickCookieAgreeButton();
-
-        page.openServiceDropdown();
-        List<String> actualOptions = page.getServiceOptionsText();
+        List<String> actualOptions = mtsPage.getServiceOptionsText();
 
         List<String> expectedOptions = List.of(
                 "Услуги связи",
