@@ -1,23 +1,31 @@
 package lesson10;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 
 public class MtsPaymentTest extends BaseTest {
 
+    private MtsPage mtsPage;
+    private PaymentModal paymentModal;
+
+    @BeforeEach
+    void setPageObjects() {
+        mtsPage = new MtsPage(driver);
+        paymentModal = new PaymentModal(driver);
+    }
+
     @Test
     void checkBlockTitle() {
-        MtsPage mtsPage = new MtsPage(driver);
-
         assertTrue(mtsPage.isBlockTitleDisplayed());
     }
 
     @Test
     void paymentSystemLogos() {
-        MtsPage mtsPage = new MtsPage(driver);
 
         assertTrue(mtsPage.isVisaLogoDisplayed());
         assertTrue(mtsPage.isVerifiedVisaLogo());
@@ -28,7 +36,6 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkMoreInfoLink() {
-        MtsPage mtsPage = new MtsPage(driver);
 
         mtsPage.clickCookieAgreeButton();
         mtsPage.clickMoreInfoLink();
@@ -41,15 +48,13 @@ public class MtsPaymentTest extends BaseTest {
     @Test
     void checkContinueButtonForCommunicationServices() {
 
-        MtsPage mtsPage = new MtsPage(driver);
-
         mtsPage.clickCookieAgreeButton();
         mtsPage.enterPhone("297777777");
         mtsPage.enterSum("100");
         mtsPage.clickContinue();
-        mtsPage.switchToPaymentFrame();
+        paymentModal.switchToPaymentFrame();
 
-        assertEquals("Оплатить 100.00 BYN", mtsPage.getPayButton());
+        assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButton());
     }
 
     @Test
@@ -75,19 +80,22 @@ public class MtsPaymentTest extends BaseTest {
     @Test
     void paymentDetails() {
 
-        MtsPage page = new MtsPage(driver);
+        mtsPage.clickCookieAgreeButton();
+        mtsPage.enterPhone("297777777");
+        mtsPage.enterSum("100");
+        mtsPage.clickContinue();
 
-        page.openPaymentForm("297777777", "100");
+        paymentModal.switchToPaymentFrame();
 
-        assertEquals("100.00 BYN", page.getPaySum());
-        assertEquals("Оплата: Услуги связи Номер:375297777777", page.getPhoneNumber());
-        assertEquals("Номер карты", page.getCardNumberLableText());
-        assertEquals("Срок действия", page.getExpirationDataLabelText());
-        assertEquals("CVC", page.getCvcLabelText());
-        assertEquals("Имя и фамилия на карте", page.getHolderNameLableText());
-        assertTrue(page.isVisaLogoPDisplayed());
-        assertTrue(page.isMasterCardPDisplayed());
-        assertTrue(page.isBelkartLogoPDisplayed());
-        assertTrue(page.isActiverandomLogo());
+        assertEquals("100.00 BYN", paymentModal.getPaySum());
+        assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPhoneNumber());
+        assertEquals("Номер карты", paymentModal.getCardNumberLabelText());
+        assertEquals("Срок действия", paymentModal.getExpirationDateLabelText());
+        assertEquals("CVC", paymentModal.getCvcLabelText());
+        assertEquals("Имя и фамилия на карте", paymentModal.getHolderNameLabelText());
+        assertTrue(paymentModal.isVisaLogoPDisplayed());
+        assertTrue(paymentModal.isMasterCardPDisplayed());
+        assertTrue(paymentModal.isBelkartLogoPDisplayed());
+        assertTrue(paymentModal.isActiveRandomLogoDisplayed());
     }
 }
