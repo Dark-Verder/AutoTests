@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import utils.Attachments;
+import io.qameta.allure.Allure;
+
 public class MtsPaymentTest extends BaseTest {
 
     private MtsPage mtsPage;
@@ -21,29 +24,76 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkBlockTitle() {
-        assertTrue(mtsPage.isBlockTitleDisplayed());
+
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Verify block title is displayed", () -> {
+            assertTrue(mtsPage.isBlockTitleDisplayed());
+        });
+
+        Allure.step("Capture block title screenshot", () -> {
+            Attachments.saveElementScreenshot(mtsPage.getBlockTitleElement());
+        });
     }
 
     @Test
     void paymentSystemLogos() {
 
-        assertTrue(mtsPage.isVisaLogoDisplayed());
-        assertTrue(mtsPage.isVerifiedVisaLogo());
-        assertTrue(mtsPage.isMasterCardLogo());
-        assertTrue(mtsPage.isSecureCodeLogo());
-        assertTrue(mtsPage.isBelkartLogo());
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Verify Visa logo is displayed", () -> {
+            assertTrue(mtsPage.isVisaLogoDisplayed());
+        });
+
+        Allure.step("Verify Verified by Visa logo is displayed", () -> {
+            assertTrue(mtsPage.isVerifiedVisaLogo());
+        });
+
+        Allure.step("Verify MasterCard logo is displayed", () -> {
+            assertTrue(mtsPage.isMasterCardLogo());
+        });
+
+        Allure.step("Verify SecureCode logo is displayed", () -> {
+            assertTrue(mtsPage.isSecureCodeLogo());
+        });
+
+        Allure.step("Verify Belkart logo is displayed", () -> {
+            assertTrue(mtsPage.isBelkartLogo());
+        });
+
+        Allure.step("Capture payment systems screenshot", () -> {
+            Attachments.saveElementScreenshot(mtsPage.getPaymentLogosBlock());
+        });
     }
 
     @Test
     void checkMoreInfoLink() {
 
-        mtsPage.clickCookieAgreeButton();
-        mtsPage.clickMoreInfoLink();
-        mtsPage.waitForUrlContains("poryadok-oplaty");
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
 
-        assertTrue(driver.getCurrentUrl().contains("poryadok-oplaty"));
+        Allure.step("Click More info link", () -> {
+            mtsPage.clickMoreInfoLink();
+        });
 
+        Allure.step("Wait until URL contains expected text", () -> {
+            mtsPage.waitForUrlContains("poryadok-oplaty");
+        });
+
+        Allure.step("Verify user is redirected to the payment procedure page", () -> {
+            assertTrue(driver.getCurrentUrl().contains("poryadok-oplaty"));
+        });
+
+        Allure.step("Capture redirected page screenshot", () -> {
+            Attachments.saveScreenshot(driver);
+        });
     }
+
 
     @Test
     void checkContinueButtonForCommunicationServices() {

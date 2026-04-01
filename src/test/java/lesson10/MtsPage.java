@@ -28,11 +28,15 @@ public class MtsPage {
         return driver.findElement(blockTitle).isDisplayed();
     }
 
+    public WebElement getBlockTitleElement() {
+        return driver.findElement(blockTitle); }
+
     private By visaLogo = By.xpath("//section[@class='pay']//img[@alt='Visa']");
     private By verifiedVisaLogo = By.xpath("//section[@class='pay']//img[@alt='Verified By Visa']");
     private By masterCardLogo = By.xpath("//section[@class='pay']//img[@alt='MasterCard']");
     private By secureCodeLogo = By.xpath("//section[@class='pay']//img[@alt='MasterCard Secure Code']");
     private By belkartLogo = By.xpath("//section[@class='pay']//img[@alt='Белкарт']");
+    private By paymentLogosBlock = By.xpath("//section[@class='pay']");
 
     public boolean isVisaLogoDisplayed() {
         return driver.findElement(visaLogo).isDisplayed();
@@ -52,6 +56,10 @@ public class MtsPage {
 
     public boolean isBelkartLogo() {
         return driver.findElement(belkartLogo).isDisplayed();
+    }
+
+    public WebElement getPaymentLogosBlock() {
+        return driver.findElement(paymentLogosBlock);
     }
 
     private By cookiesAgreeButton = By.id("cookie-agree");
