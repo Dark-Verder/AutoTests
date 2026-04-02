@@ -94,57 +94,104 @@ public class MtsPaymentTest extends BaseTest {
         });
     }
 
-
     @Test
     void checkContinueButtonForCommunicationServices() {
 
-        mtsPage.clickCookieAgreeButton();
-        mtsPage.enterPhone("297777777");
-        mtsPage.enterSum("100");
-        mtsPage.clickContinue();
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
 
-        paymentModal.switchToPaymentFrame();
+        Allure.step("Enter phone number", () -> {
+            mtsPage.enterPhone("297777777");
+        });
 
-        assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButton());
+        Allure.step("Enter payment amount", () -> {
+            mtsPage.enterSum("100");
+        });
+
+        Allure.step("Click Continue button", () -> {
+            mtsPage.clickContinue();
+        });
+
+        Allure.step("Switch to payment frame", () -> {
+            paymentModal.switchToPaymentFrame();
+        });
+
+        Allure.step("Verify pay button text", () -> {
+            assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButton());
+        });
+
+        Allure.step("Capture pay button screenshot", () -> {
+            Attachments.saveElementScreenshot(paymentModal.getPayButtonElement());
+        });
     }
 
     @Test
     void checkServiceDropdownOptions() {
 
-        mtsPage.clickCookieAgreeButton();
-        mtsPage.openServiceDropdown();
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
 
-        List<String> actualOptions = mtsPage.getServiceOptionsText();
+        Allure.step("Open service dropdown", () -> {
+            mtsPage.openServiceDropdown();
+        });
 
-        List<String> expectedOptions = List.of(
-                "Услуги связи",
-                "Домашний интернет",
-                "Рассрочка",
-                "Задолженность"
-        );
+        Allure.step("Scroll to opened dropdown and capture screenshot", () -> {
+            mtsPage.scrollToElement(mtsPage.getServiceDropdownContainerElement());
+            Attachments.saveScreenshot(driver);
+        });
 
-        assertEquals(expectedOptions, actualOptions);
+        Allure.step("Verify service dropdown options", () -> {
+            List<String> actualOptions = mtsPage.getServiceOptionsText();
+
+            List<String> expectedOptions = List.of(
+                    "Услуги связи",
+                    "Домашний интернет",
+                    "Рассрочка",
+                    "Задолженность"
+            );
+
+            assertEquals(expectedOptions, actualOptions);
+        });
     }
 
     @Test
     void paymentDetails() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
 
-        mtsPage.clickCookieAgreeButton();
-        mtsPage.enterPhone("297777777");
-        mtsPage.enterSum("100");
-        mtsPage.clickContinue();
+        Allure.step("Fill payment form", () -> {
+            mtsPage.enterPhone("297777777");
+            mtsPage.enterSum("100");
+        });
 
-        paymentModal.switchToPaymentFrame();
+        Allure.step("Click continue", () -> {
+            mtsPage.clickContinue();
+        });
 
-        assertEquals("100.00 BYN", paymentModal.getPaySum());
-        assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPhoneNumber());
-        assertEquals("Номер карты", paymentModal.getCardNumberLabelText());
-        assertEquals("Срок действия", paymentModal.getExpirationDateLabelText());
-        assertEquals("CVC", paymentModal.getCvcLabelText());
-        assertEquals("Имя и фамилия на карте", paymentModal.getHolderNameLabelText());
-        assertTrue(paymentModal.isVisaLogoPDisplayed());
-        assertTrue(paymentModal.isMasterCardPDisplayed());
-        assertTrue(paymentModal.isBelkartLogoPDisplayed());
-        assertTrue(paymentModal.isActiveRandomLogoDisplayed());
+        Allure.step("Switch to payment frame", () -> {
+            paymentModal.switchToPaymentFrame();
+        });
+
+        Allure.step("Capture payment modal screenshot", () -> {
+            paymentModal.savePaymentModalScreenshot();
+        });
+
+        Allure.step("Verify payment details", () -> {
+            assertEquals("100.00 BYN", paymentModal.getPaySum());
+            assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPhoneNumber());
+
+            assertEquals("Номер карты", paymentModal.getCardNumberLabelText());
+            assertEquals("Срок действия", paymentModal.getExpirationDateLabelText());
+            assertEquals("CVC", paymentModal.getCvcLabelText());
+            assertEquals("Имя и фамилия на карте", paymentModal.getHolderNameLabelText());
+
+            assertTrue(paymentModal.isVisaLogoDisplayed());
+            assertTrue(paymentModal.isMasterCardDisplayed());
+            assertTrue(paymentModal.isBelkartLogoDisplayed());
+            assertTrue(paymentModal.isActiveRandomLogoDisplayed());
+        });
     }
 }

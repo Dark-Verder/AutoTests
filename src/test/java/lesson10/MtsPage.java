@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.time.Duration;
 
@@ -81,6 +82,7 @@ public class MtsPage {
 
     private By dropdown = By.xpath("//button[@class='select__header']");
     private By serviceOptions = By.xpath("//ul[@class='select__list']//p[@class='select__option']");
+    private By serviceDropdownContainer = By.xpath("//section[contains(@class,'pay')]//div[@class='select']");
 
     public void openServiceDropdown() {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(dropdown));
@@ -94,6 +96,17 @@ public class MtsPage {
         return options.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
+    }
+
+    public WebElement getServiceDropdownContainerElement() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(serviceDropdownContainer));
+    }
+
+    public void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});",
+                element
+        );
     }
 
     private By phoneInput = By.id("connection-phone");
