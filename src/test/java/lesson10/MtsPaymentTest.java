@@ -1,15 +1,14 @@
 package lesson10;
 
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import utils.Attachments;
 
 import java.util.List;
 
-import utils.Attachments;
-import io.qameta.allure.Allure;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MtsPaymentTest extends BaseTest {
 
@@ -24,7 +23,6 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkBlockTitle() {
-
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -39,8 +37,7 @@ public class MtsPaymentTest extends BaseTest {
     }
 
     @Test
-    void paymentSystemLogos() {
-
+    void checkPaymentSystemLogos() {
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -50,19 +47,19 @@ public class MtsPaymentTest extends BaseTest {
         });
 
         Allure.step("Verify Verified by Visa logo is displayed", () -> {
-            assertTrue(mtsPage.isVerifiedVisaLogo());
+            assertTrue(mtsPage.isVerifiedVisaLogoDisplayed());
         });
 
         Allure.step("Verify MasterCard logo is displayed", () -> {
-            assertTrue(mtsPage.isMasterCardLogo());
+            assertTrue(mtsPage.isMasterCardLogoDisplayed());
         });
 
         Allure.step("Verify SecureCode logo is displayed", () -> {
-            assertTrue(mtsPage.isSecureCodeLogo());
+            assertTrue(mtsPage.isSecureCodeLogoDisplayed());
         });
 
         Allure.step("Verify Belkart logo is displayed", () -> {
-            assertTrue(mtsPage.isBelkartLogo());
+            assertTrue(mtsPage.isBelkartLogoDisplayed());
         });
 
         Allure.step("Capture payment systems screenshot", () -> {
@@ -72,7 +69,6 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkMoreInfoLink() {
-
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -96,7 +92,6 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkContinueButtonForCommunicationServices() {
-
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -118,7 +113,7 @@ public class MtsPaymentTest extends BaseTest {
         });
 
         Allure.step("Verify pay button text", () -> {
-            assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButton());
+            assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButtonText());
         });
 
         Allure.step("Capture pay button screenshot", () -> {
@@ -128,7 +123,6 @@ public class MtsPaymentTest extends BaseTest {
 
     @Test
     void checkServiceDropdownOptions() {
-
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -157,7 +151,7 @@ public class MtsPaymentTest extends BaseTest {
     }
 
     @Test
-    void paymentDetails() {
+    void checkPaymentDetails() {
         Allure.step("Close cookies", () -> {
             mtsPage.clickCookieAgreeButton();
         });
@@ -167,7 +161,7 @@ public class MtsPaymentTest extends BaseTest {
             mtsPage.enterSum("100");
         });
 
-        Allure.step("Click continue", () -> {
+        Allure.step("Click Continue button", () -> {
             mtsPage.clickContinue();
         });
 
@@ -179,17 +173,24 @@ public class MtsPaymentTest extends BaseTest {
             paymentModal.savePaymentModalScreenshot();
         });
 
-        Allure.step("Verify payment details", () -> {
+        Allure.step("Verify payment amount", () -> {
             assertEquals("100.00 BYN", paymentModal.getPaySum());
-            assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPhoneNumber());
+        });
 
+        Allure.step("Verify payment description", () -> {
+            assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPaymentDescriptionText());
+        });
+
+        Allure.step("Verify card field labels", () -> {
             assertEquals("Номер карты", paymentModal.getCardNumberLabelText());
             assertEquals("Срок действия", paymentModal.getExpirationDateLabelText());
             assertEquals("CVC", paymentModal.getCvcLabelText());
             assertEquals("Имя и фамилия на карте", paymentModal.getHolderNameLabelText());
+        });
 
+        Allure.step("Verify payment system logos", () -> {
             assertTrue(paymentModal.isVisaLogoDisplayed());
-            assertTrue(paymentModal.isMasterCardDisplayed());
+            assertTrue(paymentModal.isMastercardLogoDisplayed());
             assertTrue(paymentModal.isBelkartLogoDisplayed());
             assertTrue(paymentModal.isActiveRandomLogoDisplayed());
         });
