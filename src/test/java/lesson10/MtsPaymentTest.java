@@ -1,0 +1,198 @@
+package lesson10;
+
+import io.qameta.allure.Allure;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import utils.Attachments;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class MtsPaymentTest extends BaseTest {
+
+    private MtsPage mtsPage;
+    private PaymentModal paymentModal;
+
+    @BeforeEach
+    void setPageObjects() {
+        mtsPage = new MtsPage(driver);
+        paymentModal = new PaymentModal(driver);
+    }
+
+    @Test
+    void checkBlockTitle() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Verify block title is displayed", () -> {
+            assertTrue(mtsPage.isBlockTitleDisplayed());
+        });
+
+        Allure.step("Capture block title screenshot", () -> {
+            Attachments.saveElementScreenshot(mtsPage.getBlockTitleElement());
+        });
+    }
+
+    @Test
+    void checkPaymentSystemLogos() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Verify Visa logo is displayed", () -> {
+            assertTrue(mtsPage.isVisaLogoDisplayed());
+        });
+
+        Allure.step("Verify Verified by Visa logo is displayed", () -> {
+            assertTrue(mtsPage.isVerifiedVisaLogoDisplayed());
+        });
+
+        Allure.step("Verify MasterCard logo is displayed", () -> {
+            assertTrue(mtsPage.isMasterCardLogoDisplayed());
+        });
+
+        Allure.step("Verify SecureCode logo is displayed", () -> {
+            assertTrue(mtsPage.isSecureCodeLogoDisplayed());
+        });
+
+        Allure.step("Verify Belkart logo is displayed", () -> {
+            assertTrue(mtsPage.isBelkartLogoDisplayed());
+        });
+
+        Allure.step("Capture payment systems screenshot", () -> {
+            Attachments.saveElementScreenshot(mtsPage.getPaymentLogosBlock());
+        });
+    }
+
+    @Test
+    void checkMoreInfoLink() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Click More info link", () -> {
+            mtsPage.clickMoreInfoLink();
+        });
+
+        Allure.step("Wait until URL contains expected text", () -> {
+            mtsPage.waitForUrlContains("poryadok-oplaty");
+        });
+
+        Allure.step("Verify user is redirected to the payment procedure page", () -> {
+            assertTrue(driver.getCurrentUrl().contains("poryadok-oplaty"));
+        });
+
+        Allure.step("Capture redirected page screenshot", () -> {
+            Attachments.saveScreenshot(driver);
+        });
+    }
+
+    @Test
+    void checkContinueButtonForCommunicationServices() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Enter phone number", () -> {
+            mtsPage.enterPhone("297777777");
+        });
+
+        Allure.step("Enter payment amount", () -> {
+            mtsPage.enterSum("100");
+        });
+
+        Allure.step("Click Continue button", () -> {
+            mtsPage.clickContinue();
+        });
+
+        Allure.step("Switch to payment frame", () -> {
+            paymentModal.switchToPaymentFrame();
+        });
+
+        Allure.step("Verify pay button text", () -> {
+            assertEquals("Оплатить 100.00 BYN", paymentModal.getPayButtonText());
+        });
+
+        Allure.step("Capture pay button screenshot", () -> {
+            Attachments.saveElementScreenshot(paymentModal.getPayButtonElement());
+        });
+    }
+
+    @Test
+    void checkServiceDropdownOptions() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Open service dropdown", () -> {
+            mtsPage.openServiceDropdown();
+        });
+
+        Allure.step("Scroll to opened dropdown and capture screenshot", () -> {
+            mtsPage.scrollToElement(mtsPage.getServiceDropdownContainerElement());
+            Attachments.saveScreenshot(driver);
+        });
+
+        Allure.step("Verify service dropdown options", () -> {
+            List<String> actualOptions = mtsPage.getServiceOptionsText();
+
+            List<String> expectedOptions = List.of(
+                    "Услуги связи",
+                    "Домашний интернет",
+                    "Рассрочка",
+                    "Задолженность"
+            );
+
+            assertEquals(expectedOptions, actualOptions);
+        });
+    }
+
+    @Test
+    void checkPaymentDetails() {
+        Allure.step("Close cookies", () -> {
+            mtsPage.clickCookieAgreeButton();
+        });
+
+        Allure.step("Fill payment form", () -> {
+            mtsPage.enterPhone("297777777");
+            mtsPage.enterSum("100");
+        });
+
+        Allure.step("Click Continue button", () -> {
+            mtsPage.clickContinue();
+        });
+
+        Allure.step("Switch to payment frame", () -> {
+            paymentModal.switchToPaymentFrame();
+        });
+
+        Allure.step("Capture payment modal screenshot", () -> {
+            paymentModal.savePaymentModalScreenshot();
+        });
+
+        Allure.step("Verify payment amount", () -> {
+            assertEquals("100.00 BYN", paymentModal.getPaySum());
+        });
+
+        Allure.step("Verify payment description", () -> {
+            assertEquals("Оплата: Услуги связи Номер:375297777777", paymentModal.getPaymentDescriptionText());
+        });
+
+        Allure.step("Verify card field labels", () -> {
+            assertEquals("Номер карты", paymentModal.getCardNumberLabelText());
+            assertEquals("Срок действия", paymentModal.getExpirationDateLabelText());
+            assertEquals("CVC", paymentModal.getCvcLabelText());
+            assertEquals("Имя и фамилия на карте", paymentModal.getHolderNameLabelText());
+        });
+
+        Allure.step("Verify payment system logos", () -> {
+            assertTrue(paymentModal.isVisaLogoDisplayed());
+            assertTrue(paymentModal.isMastercardLogoDisplayed());
+            assertTrue(paymentModal.isBelkartLogoDisplayed());
+            assertTrue(paymentModal.isActiveRandomLogoDisplayed());
+        });
+    }
+}
